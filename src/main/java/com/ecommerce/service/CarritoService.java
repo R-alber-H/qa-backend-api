@@ -17,4 +17,9 @@ public class CarritoService {
         return total;
     }
 
+    public boolean agregarProducto(Producto producto){
+        productos.add(producto);
+        return true;
+    }
+
 }
