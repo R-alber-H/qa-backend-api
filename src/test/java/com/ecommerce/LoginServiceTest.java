@@ -1,5 +1,6 @@
 package com.ecommerce;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,11 +18,22 @@ public class LoginServiceTest {
     }
 
     @Test
-    void tT06_loginExitoso(){
+    void T06_loginExitoso(){
         String email = "juan@email.com";
         String password = "1234";
 
         String token = loginService.login(email,password);
         assertNotNull(token, "El token no debería ser nulo");
+    }
+
+    @Test
+    void T07_login_contaseñaIncorresta(){
+        String email = "juan@email.com";
+        String password = "incorrepto"; 
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            loginService.login(email, password);
+        });
+
     }
 }
