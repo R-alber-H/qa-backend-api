@@ -17,6 +17,14 @@ public class LoginService {
 
     public String login(String email, String password) {
 
+        if(email.isBlank() || password.isBlank()){
+            throw new IllegalArgumentException("Campos requeridos");
+        }
+
+        if(!usuarios.containsKey(email)){
+            throw new IllegalArgumentException("Usuario no encontrado");
+        }
+
         String passwordEncontrado = usuarios.get(email);
 
         if(passwordEncontrado == null || !password.equals(passwordEncontrado)){

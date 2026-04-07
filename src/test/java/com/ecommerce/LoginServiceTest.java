@@ -34,6 +34,25 @@ public class LoginServiceTest {
         assertThrows(IllegalArgumentException.class, () -> {
             loginService.login(email, password);
         });
+    }
 
+    @Test
+    void T08_login_usuarioNoRegistrado(){
+        String email = "maria@email.com";
+        String password = "1234";
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            loginService.login(email, password);
+        });
+    }
+
+    @Test
+    void T09_login_CamposVacios(){
+        String email = "";
+        String password = "";
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            loginService.login(email, password);
+        });
     }
 }
