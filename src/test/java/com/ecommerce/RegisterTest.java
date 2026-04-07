@@ -39,4 +39,14 @@ class RegisterServiceTest {
             userService.registerUser(email, password);
         });
     }
+
+    @Test
+    void T03_contaseñaVacia(){
+        String email = "juan@mail.com";
+        String password = "";
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            userService.registerUser(email, password);
+        });
+    }
 }
