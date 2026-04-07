@@ -34,5 +34,15 @@ public class ProductoServiceTest {
             productoService.registrarProducto(nombre, precio, stock);
         });
     }
+
+    @Test
+    void T12_precioNegativo(){
+        String nombre = "";
+        float precio =-1;
+        int stock =20;
+        assertThrows(IllegalArgumentException.class, () -> {
+            productoService.registrarProducto(nombre, precio, stock);
+        });
+    }
     
 }
