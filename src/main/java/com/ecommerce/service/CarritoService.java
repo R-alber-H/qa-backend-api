@@ -22,4 +22,13 @@ public class CarritoService {
         return true;
     }
 
+    public boolean eliminarProducto(String nombre){
+        Producto producto = productos.stream()
+                .filter(p -> p.getNombre().equalsIgnoreCase(nombre))
+                .findFirst()
+                .orElse(null); 
+        productos.remove(producto);
+        return true;
+    }
+
 }

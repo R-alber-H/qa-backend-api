@@ -33,4 +33,16 @@ public class CarritoServiceTest {
         carritoService.agregarProducto(producto);
         assertFalse(carritoService.getProductos().isEmpty(), "La lista de productos no debería estar vacía");
     }
+
+    @Test
+    void T_17_eliminarProducto(){
+        String nombre = "Laptop";
+        float precio =1200;
+        int stock =20;
+        Producto producto = new Producto(nombre,precio,stock);
+
+        carritoService.agregarProducto(producto);
+        carritoService.eliminarProducto(nombre);
+        assertTrue(carritoService.getProductos().isEmpty(), "La lista de productos debería estar vacía");
+    }
 }

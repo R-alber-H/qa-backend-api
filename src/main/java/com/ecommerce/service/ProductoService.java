@@ -26,9 +26,9 @@ public class ProductoService {
 
     public Producto buscarProducto(String nombre) {
         Producto producto = productos.stream()
-                .filter(u -> u.getNombre().equalsIgnoreCase(nombre))
+                .filter(p -> p.getNombre().equalsIgnoreCase(nombre))
                 .findFirst()
-                .orElse(null); // Retorna null si no lo encuentra
+                .orElse(null); 
         return producto;
     }
 
