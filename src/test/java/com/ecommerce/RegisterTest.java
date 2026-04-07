@@ -49,4 +49,15 @@ class RegisterServiceTest {
             userService.registerUser(email, password);
         });
     }
+
+    @Test
+    void T04_emailDuplicado(){
+        String email = "juan@mail.com";
+        String password = "1234";
+        userService.registerUser(email, password);
+
+        assertThrows(IllegalArgumentException.class,() -> {
+            userService.registerUser(email, password);
+        });
+    }
 }
