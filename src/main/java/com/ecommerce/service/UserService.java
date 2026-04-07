@@ -1,8 +1,13 @@
 package com.ecommerce.service;
 
 public class UserService {
-    public static String registerUser(String username, String password) {
-        // implementación mínima para pasar el test
-        return "Usuario registrado";
+    // test 1
+
+    public boolean registerUser(String email, String password) {
+        if (email == null || email.isEmpty()) {
+            throw new IllegalArgumentException("Email requerido");
+        }
+        return true;
     }
+
 }
