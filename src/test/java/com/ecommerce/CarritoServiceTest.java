@@ -15,6 +15,7 @@ public class CarritoServiceTest {
     @BeforeEach
     void setup() {
         carritoService = new CarritoService();
+        
     }
 
     @Test
@@ -35,7 +36,7 @@ public class CarritoServiceTest {
     }
 
     @Test
-    void T_17_eliminarProducto(){
+    void T17_eliminarProducto(){
         String nombre = "Laptop";
         float precio =1200;
         int stock =20;
@@ -44,5 +45,22 @@ public class CarritoServiceTest {
         carritoService.agregarProducto(producto);
         carritoService.eliminarProducto(nombre);
         assertTrue(carritoService.getProductos().isEmpty(), "La lista de productos debería estar vacía");
+    }
+
+    @Test
+    void T18_calcularTotal(){
+        String nombre = "Laptop";
+        float precio =1200;
+        int stock =20;
+        Producto producto = new Producto(nombre,precio,stock);
+        carritoService.agregarProducto(producto);
+
+        String nombre_2 = "Laptop I3";
+        float precio_2 =1500;
+        int stock_2 =20;
+        Producto producto_2 = new Producto(nombre_2,precio_2,stock_2);
+        carritoService.agregarProducto(producto_2);
+
+        assertEquals(2700, carritoService.getTotal(), "El total no coincide con la suma de los productos");
     }
 }

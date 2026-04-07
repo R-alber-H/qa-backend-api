@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data // Genera getters, setters, toString, etc.
-@NoArgsConstructor // Genera constructor vacío
+@Data 
+@NoArgsConstructor 
 @AllArgsConstructor
 public class Producto {
     private String nombre;

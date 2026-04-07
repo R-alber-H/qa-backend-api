@@ -19,6 +19,7 @@ public class CarritoService {
 
     public boolean agregarProducto(Producto producto){
         productos.add(producto);
+        this.total += producto.getPrecio();
         return true;
     }
 
