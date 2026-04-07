@@ -16,6 +16,9 @@ public class UserService {
         if (password == null || password.isEmpty()){
             throw new IllegalArgumentException("Password requerido");
         }
+        if (!email.contains("@")){
+            throw new IllegalArgumentException("Formato invalido");
+        }
         if (listaEmails.contains(email)){
             throw new IllegalArgumentException("Email registrado");
         }

@@ -18,7 +18,7 @@ class RegisterServiceTest {
     @Test
     void T01_registroExitoso() {
         // GIVEN — datos válidos
-        String email = "juan@mail.com";
+        String email = "juan@email.com";
         String password = "1234";
 
         // WHEN — llamamos al método
@@ -42,7 +42,7 @@ class RegisterServiceTest {
 
     @Test
     void T03_contaseñaVacia(){
-        String email = "juan@mail.com";
+        String email = "juan@email.com";
         String password = "";
 
         assertThrows(IllegalArgumentException.class, () -> {
@@ -52,10 +52,20 @@ class RegisterServiceTest {
 
     @Test
     void T04_emailDuplicado(){
-        String email = "juan@mail.com";
+        String email = "juan@email.com";
         String password = "1234";
         userService.registerUser(email, password);
 
+        assertThrows(IllegalArgumentException.class,() -> {
+            userService.registerUser(email, password);
+        });
+    }
+
+    @Test 
+    void T05_emailSinFormato(){
+        String email = "juanemail.com";
+        String password = "1234";
+   
         assertThrows(IllegalArgumentException.class,() -> {
             userService.registerUser(email, password);
         });
