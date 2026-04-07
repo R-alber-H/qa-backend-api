@@ -1,18 +1,35 @@
 package com.ecommerce.service;
 
-public class ProductoService {
-    
-    public boolean registrarProducto(String nombre,float precio,int stock){
+import java.util.ArrayList;
+import java.util.List;
 
-        if(nombre.isBlank()){
+import com.ecommerce.model.Producto;
+
+public class ProductoService {
+    private List<Producto> productos = new ArrayList<>();
+
+    public boolean registrarProducto(String nombre, float precio, int stock) {
+
+        if (nombre.isBlank()) {
             throw new IllegalArgumentException("Campos requeridos");
         }
-        if(precio < 0){
+        if (precio < 0) {
             throw new IllegalArgumentException("El precio no puede ser negativo");
         }
-        if(precio == 0){
+        if (precio == 0) {
             throw new IllegalArgumentException("El precio deb ser mayor a 0");
         }
+
+        productos.add(new Producto(nombre, precio, stock));
         return true;
     }
+
+    public Producto buscarProducto(String nombre) {
+        Producto producto = productos.stream()
+                .filter(u -> u.getNombre().equalsIgnoreCase(nombre))
+                .findFirst()
+                .orElse(null); // Retorna null si no lo encuentra
+        return producto;
+    }
+
 }

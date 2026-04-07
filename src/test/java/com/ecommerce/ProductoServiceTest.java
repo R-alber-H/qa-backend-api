@@ -1,4 +1,5 @@
 package com.ecommerce;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,6 +56,18 @@ public class ProductoServiceTest {
         assertThrows(IllegalArgumentException.class, () -> {
             productoService.registrarProducto(nombre, precio, stock);
         });
+    }
+
+    @Test
+    void T14_buscarPorNombre(){
+        String nombre = "Laptop";
+        float precio =1200;
+        int stock =20;
+
+        productoService.registrarProducto(nombre, precio, stock);
+
+        var respuesta = productoService.buscarProducto(nombre);
+        assertNotNull(respuesta, "El producto debería estar registrado");
     }
     
 }
