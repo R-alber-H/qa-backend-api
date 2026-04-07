@@ -10,6 +10,9 @@ public class ProductoService {
         if(precio < 0){
             throw new IllegalArgumentException("El precio no puede ser negativo");
         }
+        if(precio == 0){
+            throw new IllegalArgumentException("El precio deb ser mayor a 0");
+        }
         return true;
     }
 }

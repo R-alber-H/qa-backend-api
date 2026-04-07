@@ -37,9 +37,21 @@ public class ProductoServiceTest {
 
     @Test
     void T12_precioNegativo(){
-        String nombre = "";
+        String nombre = "Laptop";
         float precio =-1;
         int stock =20;
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            productoService.registrarProducto(nombre, precio, stock);
+        });
+    }
+
+    @Test
+    void T13_precioCero(){
+        String nombre = "Laptop";
+        float precio =0;
+        int stock =20;
+
         assertThrows(IllegalArgumentException.class, () -> {
             productoService.registrarProducto(nombre, precio, stock);
         });
