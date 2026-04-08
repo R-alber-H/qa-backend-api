@@ -1,33 +1,38 @@
-package com.ecommerce.service;
+package com.ecommerce.backend_api.service;
 
 import io.jsonwebtoken.Jwts;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.crypto.SecretKey;
+import org.springframework.stereotype.Service;
 
+import com.ecommerce.backend_api.model.User;
+import com.ecommerce.backend_api.repository.UserRepository;
+
+@Service
 public class LoginService {
 
+    private final UserRepository userRepository;
     private static final SecretKey KEY = Jwts.SIG.HS256.key().build();
-    private Map<String, String> usuarios = new HashMap<>(Map.of(
-            "juan@email.com", "1234",
-            "Pedro@email.com", "123",
-            "Lucía@email.com", "123"));
+
+    public LoginService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public String login(String email, String password) {
 
-        if(email.isBlank() || password.isBlank()){
+        if (email.isBlank() || password.isBlank()) {
             throw new IllegalArgumentException("Campos requeridos");
         }
 
-        if(!usuarios.containsKey(email)){
+        if (!userRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("Usuario no encontrado");
         }
 
-        String passwordEncontrado = usuarios.get(email);
+        User user = userRepository.findByEmail(email);
 
-        if(passwordEncontrado == null || !password.equals(passwordEncontrado)){
+        String passwordEncontrado = user.getPassword();
+
+        if (passwordEncontrado == null || !password.equals(passwordEncontrado)) {
             throw new IllegalArgumentException("Credenciales incorreptas");
         }
 
