@@ -1,5 +1,7 @@
 package com.ecommerce.backend_api.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.backend_api.model.Carrito;
@@ -13,11 +15,10 @@ public class CarritoService {
     private final CarritoRepository carritoRepository;
     private final ProductoService productoService;
 
-    
     public CarritoService(CarritoRepository carritoRepository, ProductoService productoService) {
         this.carritoRepository = carritoRepository;
         this.productoService = productoService;
-      
+
     }
 
     private float total = 0;
@@ -26,12 +27,16 @@ public class CarritoService {
         return total;
     }
 
-    public boolean agregarProducto(Long idCarrito, Producto producto, int cantidad) {
+    public boolean agregarItem(Long idCarrito, Producto producto, int cantidad) {
+        if (producto == null) {
+            throw new IllegalArgumentException("Producto no registrado");
+        }
 
-        Producto productoEncontrado =productoService.buscarProducto(producto.getNombre());
+        Producto productoEncontrado = productoService.buscarProducto(producto.getNombre());
+
         Carrito carrito = carritoRepository.findById(idCarrito)
-                                            .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado con ID: " + idCarrito));
-        
+                .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado con ID: " + idCarrito));
+
         if (productoEncontrado == null) {
             throw new IllegalArgumentException("Producto no registrado");
         }
@@ -48,18 +53,34 @@ public class CarritoService {
         return true;
     }
 
-    public Long crearCarrito(){
+    public Long crearCarrito() {
         Carrito carrito = new Carrito();
         carritoRepository.save(carrito);
         return carrito.getId();
     }
 
-    public boolean eliminarProducto(String nombre) {
-        Producto producto = productoService.buscarProducto(nombre);
-        if(producto == null){
-            return false;
-        }
+    public boolean eliminarItem(Long carritoId, Producto producto) {
+        List<CarritoItems> items = getItems(carritoId);
+
+        items.removeIf(item -> item.getProducto().getNombre().equals(producto.getNombre()));
+        Carrito carrito = carritoRepository.findById(carritoId)
+                .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado con ID: " + carritoId));
+        carritoRepository.save(carrito);
         return true;
+    }
+
+    public List<CarritoItems> getItems(Long carritoId) {
+        Carrito carrito = carritoRepository.findById(carritoId)
+                .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado con ID: " + carritoId));
+
+        return carrito.getItems();
+    }
+
+    public float getTotal(Long carritoId) {
+        Carrito carrito = carritoRepository.findById(carritoId)
+                .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado con ID: " + carritoId));
+
+        return carrito.getTotal();
     }
 
 }

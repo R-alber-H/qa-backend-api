@@ -1,5 +1,6 @@
 package com.ecommerce.backend_api.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -23,7 +24,7 @@ public class Carrito {
     private Long id;
 
     @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL)
-    private List<CarritoItems> items;
+    private List<CarritoItems> items =  new ArrayList<>(); ;
 
     private float total;
 }

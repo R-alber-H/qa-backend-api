@@ -1,92 +1,118 @@
-// package com.ecommerce;
+package com.ecommerce;
 
-// import static org.junit.jupiter.api.Assertions.assertEquals;
-// import static org.junit.jupiter.api.Assertions.assertFalse;
-// import static org.junit.jupiter.api.Assertions.assertThrows;
-// import static org.junit.jupiter.api.Assertions.assertTrue;
-// import org.junit.jupiter.api.BeforeEach;
-// import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-// import com.ecommerce.model.Producto;
-// import com.ecommerce.service.CarritoService;
-// import com.ecommerce.service.ProductoService;
+import java.util.List;
 
-// public class CarritoServiceTest {
-//     private CarritoService carritoService;
-//     private ProductoService productoService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-//     @BeforeEach
-//     void setup() {
-//         productoService = new ProductoService();
-//         carritoService = new CarritoService(productoService);
-//     }
+import com.ecommerce.backend_api.model.CarritoItems;
+import com.ecommerce.backend_api.model.Producto;
+import com.ecommerce.backend_api.service.CarritoService;
+import com.ecommerce.backend_api.service.ProductoService;
+import jakarta.transaction.Transactional;
 
-//     @Test
-//     void T15_carritoVacio() {
-//         assertTrue(carritoService.getProductos().isEmpty(), "La lista de productos debería estar vacía");
-//         assertEquals(0, carritoService.getTotal(), "El total debería ser cero al iniciar");
-//     }
+@SpringBootTest(classes = com.ecommerce.backend_api.BackendApiApplication.class)
+@Transactional
+public class CarritoServiceTest {
 
-//     @Test
-//     void T16_agregarProducto(){
-//         String nombre = "Laptop";
-//         float precio =1200;
-//         int stock =20;
+    @Autowired
+    private CarritoService carritoService;
 
-//         productoService.registrarProducto(nombre, precio, stock);
-//         Producto producto = new Producto(nombre,precio,stock);
+    @Autowired
+    private ProductoService productoService;
+
+    @Test
+    void T15_carritoVacio() {
+        Long carritoId = carritoService.crearCarrito();
     
-//         carritoService.agregarProducto(producto);
-//         assertFalse(carritoService.getProductos().isEmpty(), "La lista de productos no debería estar vacía");
-//     }
+        assertTrue(carritoService.getItems(carritoId).isEmpty(), "La lista de productos debería estar vacía");
+        assertEquals(0, carritoService.getTotal(carritoId), "El total debería ser cero al iniciar");
+    }
 
-//     @Test
-//     void T17_eliminarProducto(){
-//         String nombre = "Laptop";
-//         float precio =1200;
-//         int stock =20;
+    @Test
+    void T16_agregarProducto(){
+        String nombre = "Laptop";
+        float precio =1200;
+        int stock =20;
+        int cantidad= 5;
 
-//         productoService.registrarProducto(nombre, precio, stock);
-//         Producto producto = new Producto(nombre,precio,stock);
+        Long carritoId = carritoService.crearCarrito();
+        productoService.registrarProducto(nombre, precio, stock);
+        Producto producto = productoService.buscarProducto(nombre);
+    
+        carritoService.agregarItem(carritoId, producto, cantidad);
+        assertFalse(carritoService.getItems(carritoId).isEmpty(), "La lista de productos no debería estar vacía");
+    }
 
-//         carritoService.agregarProducto(producto);
-//         carritoService.eliminarProducto(nombre);
-//         assertTrue(carritoService.getProductos().isEmpty(), "La lista de productos debería estar vacía");
-//     }
+    @Test
+    void T17_eliminarItem(){
+        String nombre = "Laptop";
+        float precio =1200;
+        int stock =20;
+        int cantidad= 5;
 
-//     @Test
-//     void T18_calcularTotal(){
-//         String nombre = "Laptop";
-//         float precio =1200;
-//         int stock =20;
-//         productoService.registrarProducto(nombre, precio, stock);
-//         Producto producto = new Producto(nombre,precio,stock);
-//         carritoService.agregarProducto(producto);
+        Long carritoId = carritoService.crearCarrito();
 
-//         String nombre_2 = "Laptop I3";
-//         float precio_2 =1500;
-//         int stock_2 =20;
-//         productoService.registrarProducto(nombre_2, precio_2, stock_2);
-//         Producto producto_2 = new Producto(nombre_2,precio_2,stock_2);
-//         carritoService.agregarProducto(producto_2);
+        productoService.registrarProducto(nombre, precio, stock);
+        Producto producto = productoService.buscarProducto(nombre);
 
-//         assertEquals(2700, carritoService.getTotal(), "El total no coincide con la suma de los productos");
-//     }
+        carritoService.agregarItem(carritoId,producto,cantidad);
 
-//     @Test
-//     void T19_agregarProductoNoRegistrado(){
-//         String nombre = "Laptop";
-//         float precio =1200;
-//         int stock =20;
-//         productoService.registrarProducto(nombre, precio, stock);
+        carritoService.eliminarItem(carritoId,producto);
 
-//         String nombre_2 = "Laptop I3";
-//         float precio_2 =1500;
-//         int stock_2 =20;
-//         Producto producto_2 = new Producto(nombre_2,precio_2,stock_2);
+        assertTrue(carritoService.getItems(carritoId).isEmpty(), "La lista de productos debería estar vacía");
+    }
 
-//         assertThrows(IllegalArgumentException.class,() ->{
-//             carritoService.agregarProducto(producto_2);
-//         });
-//     }
-// }
+    @Test
+    void T18_calcularTotal(){
+        String nombre = "Laptop";
+        float precio =1200;
+        int stock =20;
+        int cantidad = 5;
+
+        Long carritoId = carritoService.crearCarrito();
+
+        productoService.registrarProducto(nombre, precio, stock);
+        Producto producto = productoService.buscarProducto(nombre);
+
+        carritoService.agregarItem(carritoId,producto,cantidad);
+
+        String nombre_2 = "Laptop I3";
+        float precio_2 =1500;
+        int stock_2 =20;
+        int cantidad_2 =2;
+
+        productoService.registrarProducto(nombre_2, precio_2, stock_2);
+
+        Producto producto_2 = productoService.buscarProducto(nombre_2);
+
+        carritoService.agregarItem(carritoId,producto_2,cantidad_2);
+
+        assertEquals(9000, carritoService.getTotal(carritoId), "El total no coincide con la suma de los productos");
+    }
+
+    @Test
+    void T19_agregarProductoNoRegistrado(){
+        String nombre = "Laptop";
+        float precio =1200;
+        int stock =20;
+        int cantidad =2;
+
+        productoService.registrarProducto(nombre, precio, stock);
+
+        Producto productoNoRegistrado = productoService.buscarProducto("Laptop I3");
+
+        Long carritoId = carritoService.crearCarrito();
+
+        assertThrows(IllegalArgumentException.class,() ->{
+            carritoService.agregarItem(carritoId,productoNoRegistrado,cantidad);
+        });
+    }
+}
