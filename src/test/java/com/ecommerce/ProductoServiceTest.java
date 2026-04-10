@@ -2,17 +2,18 @@ package com.ecommerce;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import com.ecommerce.service.ProductoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import com.ecommerce.backend_api.service.ProductoService;
+import jakarta.transaction.Transactional;
 
+@SpringBootTest(classes = com.ecommerce.backend_api.BackendApiApplication.class)
+@Transactional
 public class ProductoServiceTest {
-    private ProductoService productoService;
 
-    @BeforeEach
-    void setUp() {
-        productoService = new ProductoService();
-    }
+    @Autowired
+    private ProductoService productoService;
 
     @Test
     void T10_agregarProducto(){

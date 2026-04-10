@@ -1,11 +1,18 @@
-package com.ecommerce.service;
+package com.ecommerce.backend_api.service;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.stereotype.Service;
 
+import com.ecommerce.backend_api.model.User;
+import com.ecommerce.backend_api.repository.UserRepository;
+
+@Service
 public class UserService {
-    // test 1
-    private List<String> listaEmails = new ArrayList<>();
+
+    private UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public boolean registerUser(String email, String password) {
         
@@ -19,10 +26,14 @@ public class UserService {
         if (!email.contains("@")){
             throw new IllegalArgumentException("Formato invalido");
         }
-        if (listaEmails.contains(email)){
+        if (userRepository.existsByEmail(email)){
             throw new IllegalArgumentException("Email registrado");
         }
-        listaEmails.add(email);
+
+        User newUser = new User();
+        newUser.setEmail(email);
+        newUser.setPassword(password); 
+        userRepository.save(newUser); 
         return true;
     }
 }
