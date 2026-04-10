@@ -1,10 +1,7 @@
 package com.ecommerce.backend_api.service;
 
 import java.util.List;
-
 import org.springframework.stereotype.Service;
-
-import com.ecommerce.backend_api.dtos.ProductoDTO;
 import com.ecommerce.backend_api.model.Carrito;
 import com.ecommerce.backend_api.model.CarritoItems;
 import com.ecommerce.backend_api.model.Producto;

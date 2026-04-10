@@ -19,17 +19,14 @@ public class LoginServiceTest {
     private LoginService loginService;
 
     @Autowired
-    private UserService userService; // Ahora Spring sí lo verá
+    private UserService userService; 
 
     @Test
     void T06_loginExitoso() {
-        // GIVEN - registrar usuario primero
         userService.registerUser("juan@email.com", "123");
 
-        // WHEN
         String token = loginService.login("juan@email.com", "123");
 
-        // THEN
         assertNotNull(token);
     }
 
