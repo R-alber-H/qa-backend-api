@@ -27,7 +27,7 @@ public class CarritoServiceTest {
         Long carritoId = carritoService.crearCarrito();
     
         assertTrue(carritoService.getItems(carritoId).isEmpty(), "La lista de productos debería estar vacía");
-        assertEquals(0, carritoService.getTotal(carritoId), "El total debería ser cero al iniciar");
+        assertEquals(0, carritoService.obtenerTotal(carritoId), "El total debería ser cero al iniciar");
     }
 
     @Test
@@ -89,7 +89,7 @@ public class CarritoServiceTest {
 
         carritoService.agregarItem(carritoId,producto_2,cantidad_2);
 
-        assertEquals(9000, carritoService.getTotal(carritoId), "El total no coincide con la suma de los productos");
+        assertEquals(9000, carritoService.obtenerTotal(carritoId), "El total no coincide con la suma de los productos");
     }
 
     @Test

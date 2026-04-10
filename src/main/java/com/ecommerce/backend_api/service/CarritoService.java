@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.ecommerce.backend_api.dtos.ProductoDTO;
 import com.ecommerce.backend_api.model.Carrito;
 import com.ecommerce.backend_api.model.CarritoItems;
 import com.ecommerce.backend_api.model.Producto;
@@ -47,6 +48,8 @@ public class CarritoService {
         nuevoItem.setCantidad(cantidad);
         nuevoItem.setSubTotal(productoEncontrado.getPrecio() * cantidad);
 
+        nuevoItem.setCarrito(carrito);
+
         carrito.getItems().add(nuevoItem);
         carrito.setTotal(carrito.getTotal() + nuevoItem.getSubTotal());
         carritoRepository.save(carrito);
@@ -60,11 +63,16 @@ public class CarritoService {
     }
 
     public boolean eliminarItem(Long carritoId, Producto producto) {
-        List<CarritoItems> items = getItems(carritoId);
-
-        items.removeIf(item -> item.getProducto().getNombre().equals(producto.getNombre()));
         Carrito carrito = carritoRepository.findById(carritoId)
                 .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado con ID: " + carritoId));
+
+        carrito.getItems().removeIf(item -> item.getProducto().getNombre().equals(producto.getNombre()));
+
+        float nuevoTotal = carrito.getItems().stream()
+                .map(CarritoItems::getSubTotal)
+                .reduce(0f, Float::sum);
+
+        carrito.setTotal(nuevoTotal);
         carritoRepository.save(carrito);
         return true;
     }
@@ -76,7 +84,7 @@ public class CarritoService {
         return carrito.getItems();
     }
 
-    public float getTotal(Long carritoId) {
+    public float obtenerTotal(Long carritoId) {
         Carrito carrito = carritoRepository.findById(carritoId)
                 .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado con ID: " + carritoId));
 

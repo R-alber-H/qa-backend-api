@@ -23,8 +23,8 @@ public class Carrito {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL)
-    private List<CarritoItems> items =  new ArrayList<>(); ;
+    @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CarritoItems> items = new ArrayList<>();
 
     private float total;
 }

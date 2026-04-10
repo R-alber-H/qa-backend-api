@@ -41,6 +41,7 @@ public class AuthController {
         try {
             String token = loginService.login(dto.getEmail(),dto.getPassword());
             return ResponseEntity.status(HttpStatus.OK).body(token);
+            
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 

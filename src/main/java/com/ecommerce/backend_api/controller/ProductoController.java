@@ -26,6 +26,7 @@ public class ProductoController {
         try {
             productoService.registrarProducto(dto.getNombre(), dto.getPrecio(), dto.getStock());
             return ResponseEntity.status(HttpStatus.CREATED).body("Producto registrado exitosamente");
+            
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 
